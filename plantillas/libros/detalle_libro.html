@@ -1,0 +1,32 @@
+{% extends '_base.html' %}
+
+{% block titulo %} - {{ libro.titulo }} {% endblock titulo %}
+
+{% block contenido %}
+
+    <div class="book-detail">
+        <img class="portada" src="{{ libro.portada.url }}" 
+        alt="{{ libro.titulo }}" title="{{ libro.titulo }}" align="right">
+        <h2><a href="">{{ libro.titulo }}</a></h2>
+        <p>Autor: {{ libro.autor }}</p>
+        <p>Precio: {{ libro.precio }}</p>
+        <div>
+            <h3>Categorías</h3>
+            <ul>
+                {% for categoria in libro.categorias.all %}
+                <li>{{categoria.categoria}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div>
+            <h3>Reseñas</h3>
+            <ul>
+                {% for resegna in libro.resegnas.all %}
+                <li>{{resegna.resegna}}</li>
+                <p>-{{resegna.autor}}</p>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock contenido %}

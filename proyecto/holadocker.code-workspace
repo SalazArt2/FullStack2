@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "../../holadocker"
+		},
+		{
+			"path": "../../postgresql"
+		},
+		{
+			"path": "../../../../../apt"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {}
+}
