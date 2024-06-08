@@ -56,7 +56,6 @@ INSTALLED_APPS = [
 
     'cuentas.apps.CuentasConfig',
     'paginas.apps.PaginasConfig',
-    'libros.apps.LibrosConfig',
     'licores.apps.LicoresConfig',
 ]
 
