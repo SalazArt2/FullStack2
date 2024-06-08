@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-from environs import Env
+from environs import Env # type: ignore
 import socket
 
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
