@@ -1,19 +1,19 @@
 {% extends '_base.html' %}
 
-{% block titulo %} - {{ libro.titulo }} {% endblock titulo %}
+{% block titulo %} - {{ licor.nombre }} {% endblock titulo %}
 
 {% block contenido %}
 
     <div class="book-detail">
-        <img class="portada" src="{{ libro.portada.url }}" 
-        alt="{{ libro.titulo }}" title="{{ libro.titulo }}" align="right">
-        <h2><a href="">{{ libro.titulo }}</a></h2>
-        <p>Autor: {{ libro.autor }}</p>
-        <p>Precio: {{ libro.precio }}</p>
+        <img class="portada" src="{{ licor.imagen.url }}" 
+        alt="{{ licor.titulo }}" title="{{ licor.nombre }}" align="right">
+        <h2><a href="">{{ licor.nombre }}</a></h2>
+        <p>Autor: {{ licor.marca }}</p>
+        <p>Precio: {{ licor.precio }}</p>
         <div>
             <h3>Categorías</h3>
             <ul>
-                {% for categoria in libro.categorias.all %}
+                {% for categoria in licor.categorias.all %}
                 <li>{{categoria.categoria}}</li>
                 {% endfor %}
             </ul>
@@ -21,7 +21,7 @@
         <div>
             <h3>Reseñas</h3>
             <ul>
-                {% for resegna in libro.resegnas.all %}
+                {% for resegna in licor.resegnas.all %}
                 <li>{{resegna.resegna}}</li>
                 <p>-{{resegna.autor}}</p>
                 {% endfor %}

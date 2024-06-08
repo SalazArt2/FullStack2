@@ -1,0 +1,21 @@
+{% extends '_base.html' %}
+
+{% block titulo %} - Lista de licores {% endblock titulo %}
+
+{% block contenido %}
+    <!-- Botones de categorías -->
+    <div>
+        {% for categoria in categorias %}
+            <a href="{% url 'licores_filtrados' %}?filtro={{ categoria.categoria }}" class="btn btn-primary">{{ categoria.categoria }}</a>
+        {% endfor %}
+    </div>
+
+    <!-- Lista de licorse -->
+    <div>
+        {% for licor in lista_licores %}
+            <div>
+                <h2><a href="{{ licor.get_absolute_url }}">{{ licor.nombre }}</a></h2>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock contenido %}

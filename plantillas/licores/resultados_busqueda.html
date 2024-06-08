@@ -1,0 +1,15 @@
+{% extends '_base.html' %}
+
+{% block titulo %}- Búsqueda{% endblock titulo %}
+{% block contenido %}
+    <h1>Resultados de Búsqueda</h1>
+    {% for licor in lista_licores %}
+        <div>
+            <img class="portada" src="{{ licor.imagen.url }}" 
+            alt="{{ licor.nombre }}" title="{{ licor.nombre }}" align="left">
+            <h3><a href="{{ licor.get_absolute_url }}">{{ licor.nombre }}</a></h3>
+            <p>Marca: {{ licor.marca }}</p>
+            <p>Precio: ${{ licor.precio }}</p>
+        </div>
+    {% endfor %}
+{% endblock contenido %}

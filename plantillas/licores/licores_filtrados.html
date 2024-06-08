@@ -1,0 +1,28 @@
+{% extends '_base.html' %}
+
+{% block titulo %}- Búsqueda{% endblock titulo %}
+{% block contenido %}
+    <h1>{{ filtro }}</h1>
+    <div>
+        {% for categoria in categorias %}
+            <a href="{% url 'licores_filtrados' %}?filtro={{ categoria.categoria }}" class="btn btn-primary">{{ categoria.categoria }}</a>
+        {% endfor %}
+    </div>
+    {% if filtro and subcategorias %}
+    <br>
+        <div>
+            {% for subcategoria in subcategorias %}
+            <a href="{% url 'licores_filtrados' %}?filtro={{ filtro }}&filtro2={{ subcategoria }}" class="btn btn-primary">{{ subcategoria }}</a>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% for licor in lista_licores %}
+        <div>
+            <img class="portada" src="{{ licor.imagen.url }}" 
+            alt="{{ licor.nombre }}" title="{{ licor.nombre }}" align="left">
+            <h3><a href="{{ licor.get_absolute_url }}">{{ licor.nombre }}</a></h3>
+            <p>Autor: {{ licor.autor }}</p>
+            <p>Precio: ${{ licor.precio }}</p>
+        </div>
+    {% endfor %}
+{% endblock contenido %}
