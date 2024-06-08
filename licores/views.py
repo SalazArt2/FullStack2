@@ -31,11 +31,11 @@ class VistaLicoresFiltrados(ListView):
                 if consulta2:
                     subcategoria = Categoria.objects.filter(categoria__icontains=consulta2).first()
                     if subcategoria:
-                        return Licor.objects.filter(categorias=subcategoria)
+                        return Licor.objects.filter(categorias=subcategoria).distinct()
                 return Licor.objects.filter(
                     Q(categorias=categoria) | Q(categorias__in=categorias_relacionadas)
-                )
-        return Licor.objects.all()
+                ).distinct()
+        return Licor.objects.all().distinct()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
