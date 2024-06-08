@@ -9,7 +9,7 @@ class VistaListaLicores(PermissionRequiredMixin, LoginRequiredMixin, ListView):
     context_object_name = 'lista_licores'
     template_name = 'licores/lista_licores.html'
     login_url = 'account_login'
-    permission_required = 'libros.special_status'
+    permission_required = 'licores.special_status'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -24,11 +24,11 @@ class Licor( models.Model ):
     precio = models.DecimalField(max_digits=7, decimal_places=2)
     imagen=models.ImageField(upload_to='imagenes/',blank=True)
     descripcion = models.CharField(max_length=200)
-    categorias = models.ManyToManyField(Categoria, related_name="libros")
+    categorias = models.ManyToManyField(Categoria, related_name="licores")
 
     class Meta:
         permissions=[
-            ('special_status','Puede leer todos los libros')
+            ('special_status','Puede ver todos los licores')
         ]
 
     def __str__( self ):
