@@ -3,30 +3,297 @@
 {% block titulo %} - {{ licor.nombre }} {% endblock titulo %}
 
 {% block contenido %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="content-container p-4 rounded">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="image-container">
+                            <img class="img-fluid" src="{{ licor.imagen.url }}" alt="{{ licor.nombre }}">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <h1><strong>{{ licor.nombre }}</strong></h1>
+                        <p><strong>Autor:</strong> {{ licor.marca }}</p>
+                        <p><strong>Precio:</strong> ${{ licor.precio }}</p>
+                        <h4 style="color: #000;">Descripción</h4>
+                        <p>{{ licor.descripcion }}</p>
+                    </div>
+                </div>
 
-    <div class="book-detail">
-        <img class="portada" src="{{ licor.imagen.url }}" 
-        alt="{{ licor.titulo }}" title="{{ licor.nombre }}" align="right">
-        <h2><a href="">{{ licor.nombre }}</a></h2>
-        <p>Autor: {{ licor.marca }}</p>
-        <p>Precio: {{ licor.precio }}</p>
-        <div>
-            <h3>Categorías</h3>
-            <ul>
-                {% for categoria in licor.categorias.all %}
-                <li>{{categoria.categoria}}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div>
-            <h3>Reseñas</h3>
-            <ul>
-                {% for resegna in licor.resegnas.all %}
-                <li>{{resegna.resegna}}</li>
-                <p>-{{resegna.autor}}</p>
-                {% endfor %}
-            </ul>
+                <div class="row mt-4 justify-content-center">
+                    <div class="col-md-10">
+                        <div class="reviews-container p-3 rounded">
+                            <h2 style="color: white; font-weight: bold;">Reseñas:</h2>
+                            {% if licor.resenhas.count > 0 %}
+                                <ul class="list-group" id="resenhas-list">
+                                    {% for resenha in licor.resenhas.all %}
+                                        <li class="list-group-item resenha-item {% if forloop.counter > 3 %}d-none{% endif %}">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <strong>{{ resenha.autor.username }}:</strong> <span class="resenha-text">{{ resenha.resenha }}</span>
+                                                </div>
+                                                {% if user.is_authenticated and resenha.autor == user %}
+                                                    <div>
+                                                        <button class="btn btn-sm btn-warning edit-resenha" data-id="{{ resenha.id }}" data-resenha="{{ resenha.resenha }}">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger delete-resenha" data-id="{{ resenha.id }}">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                {% if licor.resenhas.count > 3 %}
+                                    <button id="mostrar-mas" class="btn btn-link2">Mostrar más</button>
+                                    <button id="mostrar-menos" class="btn btn-link2 d-none">Mostrar menos</button>
+                                {% endif %}
+                            {% else %}
+                                <p>No hay reseñas disponibles.</p>
+                            {% endif %}
+                            <div class="text-end mt-3">
+                                {% if user.is_authenticated %}
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#resenhaModal">Agregar Reseña</button>
+                                {% else %}
+                                    <p>Por favor <a href="{% url 'account_login' %}">inicia sesión</a> para agregar una reseña.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="resenhaModal" tabindex="-1" aria-labelledby="resenhaModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="resenhaModalLabel">Agregar Reseña</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="resenhaForm" method="post">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="editResenhaModal" tabindex="-1" aria-labelledby="editResenhaModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editResenhaModalLabel">Editar Reseña</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editResenhaForm" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="resenha_id" id="editResenhaId">
+                                    <div class="form-group">
+                                        <label for="editResenhaInput">Reseña</label>
+                                        <textarea class="form-control" name="resenha" id="editResenhaInput" rows="3"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="deleteResenhaModal" tabindex="-1" aria-labelledby="deleteResenhaModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteResenhaModalLabel">Confirmar Eliminación</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>¿Estás seguro de que deseas borrar esta reseña?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" id="confirmDeleteResenha">Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
+</div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const mostrarMasBtn = document.getElementById('mostrar-mas');
+        const mostrarMenosBtn = document.getElementById('mostrar-menos');
+        const resenhas = document.querySelectorAll('.resenha-item');
+
+        if (mostrarMasBtn) {
+            mostrarMasBtn.addEventListener('click', function () {
+                resenhas.forEach(function (resenha, index) {
+                    if (index >= 3) {
+                        resenha.classList.remove('d-none');
+                    }
+                });
+                mostrarMasBtn.classList.add('d-none');
+                mostrarMenosBtn.classList.remove('d-none');
+            });
+
+            mostrarMenosBtn.addEventListener('click', function () {
+                resenhas.forEach(function (resenha, index) {
+                    if (index >= 3) {
+                        resenha.classList.add('d-none');
+                    }
+                });
+                mostrarMasBtn.classList.remove('d-none');
+                mostrarMenosBtn.classList.add('d-none');
+            });
+        }
+
+        const resenhaForm = document.getElementById('resenhaForm');
+        resenhaForm.addEventListener('submit', function (event) {
+            event.preventDefault(); 
+            fetch("{% url 'detalle_licor' licor.id %}", {
+                method: 'POST',
+                body: new FormData(resenhaForm),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('resenhaModal'));
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert alert-success';
+                    alertDiv.innerText = 'Reseña enviada correctamente';
+                    resenhaForm.parentElement.appendChild(alertDiv);
+                    setTimeout(() => {
+                        alertDiv.remove();
+                        modal.hide();
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert alert-danger';
+                    alertDiv.innerText = 'Hubo un error al enviar la reseña';
+                    resenhaForm.parentElement.appendChild(alertDiv);
+                    setTimeout(() => {
+                        alertDiv.remove();
+                    }, 2000);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-danger';
+                alertDiv.innerText = 'Hubo un error al enviar la reseña';
+                resenhaForm.parentElement.appendChild(alertDiv);
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 2000);
+            });
+        });
+
+        const editResenhaButtons = document.querySelectorAll('.edit-resenha');
+        const deleteResenhaButtons = document.querySelectorAll('.delete-resenha');
+
+        editResenhaButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const resenhaId = button.getAttribute('data-id');
+                const resenhaText = button.getAttribute('data-resenha');
+                document.getElementById('editResenhaId').value = resenhaId;
+                document.getElementById('editResenhaInput').value = resenhaText;
+                const editModal = new bootstrap.Modal(document.getElementById('editResenhaModal'));
+                editModal.show();
+            });
+        });
+
+        let resenhaToDelete = null;
+        deleteResenhaButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                resenhaToDelete = button.getAttribute('data-id');
+                const deleteModal = new bootstrap.Modal(document.getElementById('deleteResenhaModal'));
+                deleteModal.show();
+            });
+        });
+
+        const confirmDeleteButton = document.getElementById('confirmDeleteResenha');
+        confirmDeleteButton.addEventListener('click', function () {
+            if (resenhaToDelete) {
+                fetch(`/licores/delete_resenha/${resenhaToDelete}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        alert('Hubo un error al borrar la reseña');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Hubo un error al borrar la reseña');
+                });
+            }
+        });
+
+        const editResenhaForm = document.getElementById('editResenhaForm');
+        editResenhaForm.addEventListener('submit', function (event) {
+            event.preventDefault(); 
+            fetch("{% url 'update_resenha' %}", {
+                method: 'POST',
+                body: new FormData(editResenhaForm),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editResenhaModal'));
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert alert-success';
+                    alertDiv.innerText = 'Reseña actualizada correctamente';
+                    editResenhaForm.parentElement.appendChild(alertDiv);
+                    setTimeout(() => {
+                        alertDiv.remove();
+                        modal.hide();
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert alert-danger';
+                    alertDiv.innerText = 'Hubo un error al actualizar la reseña';
+                    editResenhaForm.parentElement.appendChild(alertDiv);
+                    setTimeout(() => {
+                        alertDiv.remove();
+                    }, 2000);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-danger';
+                alertDiv.innerText = 'Hubo un error al actualizar la reseña';
+                editResenhaForm.parentElement.appendChild(alertDiv);
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 2000);
+            });
+        });
+    });
+</script>
 {% endblock contenido %}

@@ -3,20 +3,44 @@
 {% block titulo %} - Lista de licores {% endblock titulo %}
 
 {% block contenido %}
-    <h1> Licores </h1>
-    <!-- Botones de categorías -->
-    <div>
-        {% for categoria in categorias %}
-            <a href="{% url 'licores_filtrados' %}?filtro={{ categoria.categoria }}" class="btn btn-primary">{{ categoria.categoria }}</a>
-        {% endfor %}
+    <h1 style="font-weight: bold;">Disfruta de nuestros productos, ¡Bienvenido!</h1>
+    <div class="mb-3">
+        <div class="nav">
+            {% for categoria in categorias %}
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="{% url 'licores_filtrados' %}?filtro={{ categoria.categoria }}" id="navbarDropdown{{ forloop.counter }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ categoria.categoria }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{ forloop.counter }}">
+                        {% for subcategoria in categoria.relacionadas.all %}
+                            <li><a class="dropdown-item" href="{% url 'licores_filtrados' %}?filtro={{ categoria.categoria }}&filtro2={{ subcategoria.categoria }}">{{ subcategoria.categoria }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 
-    <!-- Lista de licorse -->
-    <div>
-        {% for licor in lista_licores %}
-            <div>
-                <h2><a href="{{ licor.get_absolute_url }}">{{ licor.nombre }}</a></h2>
-            </div>
-        {% endfor %}
+    <div class="container">
+        <div class="row infinite-scroll">
+            {% for licor in lista_licores %}
+                <div class="col-md-3 col-sm-4 mb-4">
+                    <a href="{{ licor.get_absolute_url }}" class="text-decoration-none">
+                        <div class="product-card card h-100">
+                            <img class="portada card-img-top" src="{{ licor.imagen.url }}" 
+                            alt="{{ licor.nombre }}" title="{{ licor.nombre }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ licor.nombre }}</h5>
+                                <p class="card-text"><strong>Autor:</strong> {{ licor.marca }}</p>
+                                <p class="card-text"><strong>Precio:</strong> ${{ licor.precio }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="pagination">
+        {{ page_obj.paginator.num_pages }}
     </div>
 {% endblock contenido %}

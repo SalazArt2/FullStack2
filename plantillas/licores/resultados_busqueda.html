@@ -2,14 +2,27 @@
 
 {% block titulo %}- Búsqueda{% endblock titulo %}
 {% block contenido %}
-    <h1>Resultados de Búsqueda</h1>
-    {% for licor in lista_licores %}
-        <div>
-            <img class="portada" src="{{ licor.imagen.url }}" 
-            alt="{{ licor.nombre }}" title="{{ licor.nombre }}" align="left">
-            <h3><a href="{{ licor.get_absolute_url }}">{{ licor.nombre }}</a></h3>
-            <p>Marca: {{ licor.marca }}</p>
-            <p>Precio: ${{ licor.precio }}</p>
+    <h1>Resultados de Búsqueda: "{{ query }}"</h1>
+    <div class="container">
+        <div class="row infinite-scroll">
+            {% for licor in lista_licores %}
+                <div class="col-md-3 col-sm-4 mb-4">
+                    <a href="{{ licor.get_absolute_url }}" class="text-decoration-none">
+                        <div class="product-card card h-100">
+                            <img class="portada card-img-top" src="{{ licor.imagen.url }}" 
+                            alt="{{ licor.nombre }}" title="{{ licor.nombre }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ licor.nombre }}</h5>
+                                <p class="card-text">Marca: {{ licor.marca }}</p>
+                                <p class="card-text">Precio: ${{ licor.precio }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
+    </div>
+    <div class="pagination">
+        {{ page_obj.paginator.num_pages }}
+    </div>
 {% endblock contenido %}

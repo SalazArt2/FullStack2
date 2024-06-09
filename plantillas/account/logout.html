@@ -2,11 +2,41 @@
 {% load crispy_forms_tags %}
 
 {% block titulo %} - Salir {% endblock titulo %}
+
 {% block contenido %}
-<h1>Salir</h1>
-<p>¿Esta seguro de que desea salir?</p>
-<form method="post" action="{% url 'account_logout' %}">{% csrf_token %}
-    {{ form|crispy }}
-    <button class="btn btn-danger" type="submit">Salir</button>
-</form>
+<button type="button" id="logoutModalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#logoutModal" style="display:none;">
+  Abrir Modal
+</button>
+
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logoutModalLabel">Salir</h5>
+      </div>
+      <div class="modal-body">
+        ¿Está seguro de que desea salir?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancelButton">Cancelar</button>
+        <form method="post" action="{% url 'account_logout' %}">
+          {% csrf_token %}
+          <button class="btn btn-danger" type="submit">Salir</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var logoutModalButton = document.getElementById('logoutModalButton');
+    logoutModalButton.click();
+
+    var cancelButton = document.getElementById('cancelButton');
+    cancelButton.addEventListener('click', function() {
+      window.history.back(); 
+    });
+  });
+</script>
 {% endblock contenido %}

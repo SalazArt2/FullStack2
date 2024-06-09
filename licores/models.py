@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 import uuid 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Categoria(models.Model):
@@ -10,8 +11,6 @@ class Categoria(models.Model):
 
     def __str__(self):
         return self.categoria
-
-    
 
 class Licor( models.Model ):
     id = models.UUIDField(

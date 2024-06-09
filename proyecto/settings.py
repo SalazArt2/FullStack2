@@ -141,9 +141,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'estaticos/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [ BASE_DIR / 'estaticos' ]
-STATIC_ROOT = BASE_DIR/ 'archivos_estaticos'
+STATIC_ROOT = BASE_DIR / 'archivos_estaticos'
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 # Default primary key field type
