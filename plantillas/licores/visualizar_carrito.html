@@ -1,37 +1,64 @@
 {% extends '_base.html' %}
 
-{% block titulo %}- Carrito de Compras{% endblock titulo %}
+{% block titulo %} - Carrito de Compras{% endblock titulo %}
 
 {% block contenido %}
-    <h1>Carrito de Compras</h1>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Precio unitario</th>
-                            <th>Cantidad</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in items %}
-                        <tr>
-                            <td>{{ item.licor.nombre }}</td>
-                            <td>${{ item.licor.precio }}</td>
-                            <td>{{ item.cantidad }}</td>
-                            <td>${{ total}}</td>
-                        </tr>
-                        {% endfor %}
-                        <tr>
-                            <td colspan="3">Total</td>
-                            <td>${{ total }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+<h1>Carrito de Compras</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Precio unitario</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item_info in items_con_subtotales %}
+                    <tr>
+                        <td>{{ item_info.item.licor.nombre }}</td>
+                        <td>${{ item_info.item.licor.precio }}</td>
+                        <td>{{ item_info.item.cantidad }}</td>
+                        <td>${{ item_info.subtotal }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="3">Total</td>
+                        <td>${{ total }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <form id="paypal-form" method="post" action="{% url 'create_payment' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Pagar con PayPal</button>
+            </form>
         </div>
     </div>
+</div>
+
+<script>
+document.getElementById('paypal-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    fetch('{% url 'create_payment' %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+    }).then(response => response.json()).then(data => {
+        if (data.approval_url) {
+            window.location.href = data.approval_url;
+        } else {
+            alert('Error al crear el pago de PayPal');
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+        alert('Ocurrió un error.');
+    });
+});
+</script>
 {% endblock contenido %}

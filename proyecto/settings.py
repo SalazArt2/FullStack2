@@ -50,10 +50,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',  # Asegúrate de tener esto si usas autenticación social
     'debug_toolbar',
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.provider'
-
     'cuentas.apps.CuentasConfig',
     'paginas.apps.PaginasConfig',
     'licores.apps.LicoresConfig',
@@ -68,8 +66,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'allauth.account.middleware.AccountMiddleware',  
 ]
+
 
 ROOT_URLCONF = 'proyecto.urls'
 
@@ -169,9 +167,18 @@ ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 MEDIA_URL='/recursos/'
 MEDIA_ROOT=BASE_DIR / 'recursos'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+
+#Paypal
+PAYPAL_CLIENT_ID = 'Acb2mAl2p8atN2ykiWrhR0MnaAbhoMzyE6GPgAus1uOg5_pXexNPc_7dU4h230vH6NXxA59f7sZD03XA'
+PAYPAL_CLIENT_SECRET = 'EKPQV0a2C5RmHNIl4MlxO943Xf7tIgukk3zBAKeIr_Rm-jrRkwW6FegECDYgj4LkkncmZ7ylrGZPK544'
+PAYPAL_MODE = 'sandbox'  # Cambia a 'live' para producción

@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import VistaCrearPago, VistaEjecutarPago
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +26,8 @@ urlpatterns = [
     # path('cuentas/', include('cuentas.urls')),
     path('cuentas/', include('allauth.urls')),
     path('licores/', include('licores.urls')),
+    path('payment/create/', VistaCrearPago.as_view(), name='create_payment'),
+    path('payment/execute/', VistaEjecutarPago.as_view(), name='execute_payment'),
 ] + static(
     settings.MEDIA_URL,
     document_root=settings.MEDIA_ROOT

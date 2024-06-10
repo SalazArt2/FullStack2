@@ -152,15 +152,22 @@ class VistaCarrito(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         usuario = self.request.user
         carrito, created = Carrito.objects.get_or_create(usuario=usuario)
+        items = carrito.items.all()
+        total = sum(item.licor.precio * item.cantidad for item in items)
         context['carrito'] = carrito
-        context['total'] = sum(item.licor.precio * item.cantidad for item in carrito.items.all())
+        context['total'] = total
+        context['items_con_subtotales'] = [
+            {'item': item, 'subtotal': item.licor.precio * item.cantidad}
+            for item in items
+        ]
         return context
-    
+
+
 
 class VistaAgregarAlCarrito(View):
     def post(self, request, *args, **kwargs):
         licor_id = request.POST.get('licor_id')
-        cantidad = int(request.POST.get('cantidad', 1))
+        cantidad = int(request.POST.get('cantidad'))
 
         if not licor_id:
             return JsonResponse({'success': False})  # Indicar que no se pudo agregar al carrito
@@ -171,8 +178,13 @@ class VistaAgregarAlCarrito(View):
         item_carrito, creado = ItemCarrito.objects.get_or_create(carrito=carrito, licor=licor)
 
         if not creado:
+            # El item ya existe en el carrito, solo se actualiza la cantidad
             item_carrito.cantidad += cantidad
-            item_carrito.save()
+        else:
+            # El item es nuevo en el carrito, se establece la cantidad inicial
+            item_carrito.cantidad = cantidad
+
+        item_carrito.save()
 
         return JsonResponse({'success': True})  # Indicar que se agregó correctamente al carrito
     
