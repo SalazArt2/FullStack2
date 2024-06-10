@@ -212,4 +212,4 @@ class VistaAgregarLicor(CreateView):
     model = Licor
     form_class = LicorForm
     template_name = 'licores/agregar_licor.html'
-    success_url = reverse_lazy('licores_lista')
+    success_url = reverse_lazy('lista_licores')
