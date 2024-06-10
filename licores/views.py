@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView,View,CreateView
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Q, Count
 from django.shortcuts import redirect, get_object_or_404
 from django.http import JsonResponse
-from .models import Licor, Categoria, Resenha
-from .forms import ResenhaForm
+from django.urls import reverse_lazy
+from .models import Licor, Categoria, Resenha, Carrito,ItemCarrito,Wishlist,ItemWishlist
+from .forms import ResenhaForm, LicorForm
 
 @login_required
 def profile_view(request):
@@ -135,3 +136,80 @@ class VistaResultadosBusqueda(ListView):
         context = super().get_context_data(**kwargs)
         context['query'] = self.request.GET.get('query', '')
         return context
+    
+    
+class VistaCarrito(LoginRequiredMixin, ListView):
+    template_name = 'licores/visualizar_carrito.html'
+    login_url = 'account_login'
+    context_object_name = 'items'
+
+    def get_queryset(self):
+        usuario = self.request.user
+        carrito, created = Carrito.objects.get_or_create(usuario=usuario)
+        return carrito.items.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario = self.request.user
+        carrito, created = Carrito.objects.get_or_create(usuario=usuario)
+        context['carrito'] = carrito
+        context['total'] = sum(item.licor.precio * item.cantidad for item in carrito.items.all())
+        return context
+    
+
+class VistaAgregarAlCarrito(View):
+    def post(self, request, *args, **kwargs):
+        licor_id = request.POST.get('licor_id')
+        cantidad = int(request.POST.get('cantidad', 1))
+
+        if not licor_id:
+            return JsonResponse({'success': False})  # Indicar que no se pudo agregar al carrito
+
+        licor = Licor.objects.get(id=licor_id)
+        usuario = request.user
+        carrito, creado = Carrito.objects.get_or_create(usuario=usuario)
+        item_carrito, creado = ItemCarrito.objects.get_or_create(carrito=carrito, licor=licor)
+
+        if not creado:
+            item_carrito.cantidad += cantidad
+            item_carrito.save()
+
+        return JsonResponse({'success': True})  # Indicar que se agregó correctamente al carrito
+    
+class VistaVerWishlist(LoginRequiredMixin, ListView):
+    template_name = 'licores/visualizar_wishlist.html'
+    login_url = 'account_login'
+    context_object_name = 'items'
+
+    def get_queryset(self):
+        usuario = self.request.user
+        wishlist, created = Wishlist.objects.get_or_create(usuario=usuario)
+        return wishlist.items.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario = self.request.user
+        wishlist, created = Wishlist.objects.get_or_create(usuario=usuario)
+        context['wishlist'] = wishlist
+        return context
+    
+class VistaAgregarAWishlist(View):
+    def post(self, request):
+        licor_id = request.POST.get('licor_id')        
+
+        if not licor_id:
+            return JsonResponse({'success': False})  # Indicar que no se pudo agregar a la wishlist
+
+        usuario = request.user
+        wishlist, creado = Wishlist.objects.get_or_create(usuario=usuario)
+        licor = Licor.objects.get(id=licor_id)                
+        item_wishlist, creado = ItemWishlist.objects.get_or_create(wishlist=wishlist, licor=licor)        
+        if not creado:
+            item_wishlist.save()
+        return JsonResponse({'success': True})
+
+class VistaAgregarLicor(CreateView):
+    model = Licor
+    form_class = LicorForm
+    template_name = 'licores/agregar_licor.html'
+    success_url = reverse_lazy('licores_lista')

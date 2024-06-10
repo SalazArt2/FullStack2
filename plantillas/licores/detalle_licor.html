@@ -20,6 +20,25 @@
                         <h4 style="color: #000;">Descripción</h4>
                         <p>{{ licor.descripcion }}</p>
                     </div>
+                    <div class="row mt-4 justify-content-center">
+                        <div class="col-md-10">
+                            <form method="post" id="agregarCarritoForm">
+                                {% csrf_token %}
+                                <input type="hidden" name="licor_id" value="{{ licor.id }}">
+                                <div class="mb-3">
+                                    <label for="cantidadInput" class="form-label">Cantidad:</label>
+                                    <input type="number" class="form-control" id="cantidadInput" name="cantidad" value="1" min="1">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Añadir al carrito</button>
+                            </form>
+                            <form method="post" id="agregarWishlistForm">
+                                {% csrf_token %}
+                                <input type="hidden" name="licor_id" value="{{ licor.id }}">
+                                <button type="submit" class="btn btn-primary">Añadir a la Wishlist</button>
+                            </form>
+                        </div>
+                    </div>
+    
                 </div>
 
                 <div class="row mt-4 justify-content-center">
@@ -156,6 +175,51 @@
                 mostrarMenosBtn.classList.add('d-none');
             });
         }
+        const agregarWishlistForm = document.getElementById('agregarWishlistForm');
+        agregarWishlistForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            fetch("{% url 'anhadir_wishlist' %}", {
+                method: 'POST',
+                body: new FormData(agregarWishlistForm),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "{% url 'wishlist' %}";  // Redirigir a la página del carrito
+                } else {
+                    // Manejar el caso en el que no se pudo agregar al carrito
+                }
+            })
+            .catch(error => {
+                // Manejar errores de la petición
+            });
+        });
+
+        const agregarCarritoForm = document.getElementById('agregarCarritoForm');
+        agregarCarritoForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            fetch("{% url 'anhadir_carrito' %}", {
+                method: 'POST',
+                body: new FormData(agregarCarritoForm),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "{% url 'carrito' %}";  // Redirigir a la página del carrito
+                } else {
+                    // Manejar el caso en el que no se pudo agregar al carrito
+                }
+            })
+            .catch(error => {
+                // Manejar errores de la petición
+            });
+        });
 
         const resenhaForm = document.getElementById('resenhaForm');
         resenhaForm.addEventListener('submit', function (event) {

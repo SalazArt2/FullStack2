@@ -12,7 +12,9 @@
                 </div>
                 <div class="card-body">
                     <p><strong>Nombre:</strong> {{ user.username }}</p>
+                    <a class="btn btn-primary" href="{% url 'carrito' %}">Carrito</a>
                     <p><strong>Correo electrónico:</strong> {{ user.email }}</p>
+                    
                     <a class="btn btn-primary" href="{% url 'account_logout' %}">Cerrar sesión</a>
                 </div>
             </div>

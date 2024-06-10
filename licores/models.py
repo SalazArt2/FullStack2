@@ -51,3 +51,51 @@ class Resenha(models.Model):
     def __str__ (self):
         return self.resenha
 
+class Carrito(models.Model):
+    usuario = models.OneToOneField(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name='carrito'
+    )
+
+    def __str__(self):
+        return f"Carrito de {self.usuario.username}"
+    
+class ItemCarrito(models.Model):
+    carrito = models.ForeignKey(
+        Carrito,
+        on_delete=models.CASCADE,
+        related_name='items'
+    )
+    licor = models.ForeignKey(
+        Licor,
+        on_delete=models.CASCADE
+    )
+    cantidad = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.cantidad} x {self.licor.nombre}"
+    
+class Wishlist(models.Model):
+    usuario = models.OneToOneField(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        related_name='wishlist'
+    )
+
+    def __str__(self):
+        return f"Wishlist de {self.usuario.username}"
+    
+class ItemWishlist(models.Model):
+    wishlist = models.ForeignKey(
+        Wishlist,
+        on_delete=models.CASCADE,
+        related_name='items'
+    )
+    licor = models.ForeignKey(
+        Licor,
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return f"Deseo un - {self.licor.nombre}"

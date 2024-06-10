@@ -1,0 +1,35 @@
+{% extends '_base.html' %}
+
+{% block titulo %}- Wishlist{% endblock titulo %}
+
+{% block contenido %}
+    <h1>Wishlist</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Precio unitario</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td>{{ item.licor.nombre }}</td>
+                            <td>${{ item.licor.precio }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="3">Total</td>
+                            <td>${{ total }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock contenido %}
