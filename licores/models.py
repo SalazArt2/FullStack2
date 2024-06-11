@@ -16,7 +16,7 @@ class Licor( models.Model ):
 
     def get_default_user():
         User = get_user_model()
-        return User.objects.get(username='admon').id
+        return User.objects.get(username='admin').id
     
     id = models.UUIDField(
         primary_key=True,
