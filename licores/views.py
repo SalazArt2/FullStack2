@@ -168,26 +168,15 @@ class VistaCarrito(LoginRequiredMixin, ListView):
 class VistaAgregarAlCarrito(View):
     def post(self, request, *args, **kwargs):
         licor_id = request.POST.get('licor_id')
-        cantidad = int(request.POST.get('cantidad'))
+        cantidad = request.POST.get('cantidad',1)
+        print(f"Licor ID: {licor_id}, Cantidad: {cantidad}")  # Debugging line
+        licor = get_object_or_404(Licor, id=licor_id)
+        carrito, created = Carrito.objects.get_or_create(usuario=request.user)
+        carrito_item, created = ItemCarrito.objects.get_or_create(carrito=carrito, licor=licor)
+        carrito_item.cantidad += int(cantidad)
+        carrito_item.save()
+        return JsonResponse({'success': True})
 
-        if not licor_id:
-            return JsonResponse({'success': False})  # Indicar que no se pudo agregar al carrito
-
-        licor = Licor.objects.get(id=licor_id)
-        usuario = request.user
-        carrito, creado = Carrito.objects.get_or_create(usuario=usuario)
-        item_carrito, creado = ItemCarrito.objects.get_or_create(carrito=carrito, licor=licor)
-
-        if not creado:
-            # El item ya existe en el carrito, solo se actualiza la cantidad
-            item_carrito.cantidad += cantidad
-        else:
-            # El item es nuevo en el carrito, se establece la cantidad inicial
-            item_carrito.cantidad = cantidad
-
-        item_carrito.save()
-
-        return JsonResponse({'success': True})  # Indicar que se agregó correctamente al carrito
     
 class VistaVerWishlist(LoginRequiredMixin, ListView):
     template_name = 'licores/visualizar_wishlist.html'

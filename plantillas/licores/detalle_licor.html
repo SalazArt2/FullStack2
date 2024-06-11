@@ -26,8 +26,8 @@
                         <h4 style="color: #000;">Descripción</h4>
                         <p>{{ licor.descripcion }}</p>
                         <div class="d-flex align-items-center mb-3">
-                            <label for="cantidadInput" class="form-label me-2">Cantidad:</label>
-                            <input type="number" class="form-control" id="cantidadInput" name="cantidad" value="1" min="1" style="width: 80px;">
+                            <label for="cantidad" class="form-label me-2">Cantidad:</label>
+                            <input type="number" class="form-control" id="cantidad" name="cantidad" value="1" min="1" style="width: 80px;">
                         </div>
                         <div class="d-flex mb-3">
                             <form method="post" id="agregarCarritoForm" class="me-2">
@@ -294,31 +294,6 @@
                 const deleteModal = new bootstrap.Modal(document.getElementById('deleteResenhaModal'));
                 deleteModal.show();
             });
-        });
-
-        const confirmDeleteButton = document.getElementById('confirmDeleteResenha');
-        confirmDeleteButton.addEventListener('click', function () {
-            if (resenhaToDelete) {
-                fetch(`/licores/delete_resenha/${resenhaToDelete}/`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}',
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.reload();
-                    } else {
-                        alert('Hubo un error al borrar la reseña');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Hubo un error al borrar la reseña');
-                });
-            }
         });
 
         const editResenhaForm = document.getElementById('editResenhaForm');
