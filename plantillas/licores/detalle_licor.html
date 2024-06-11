@@ -16,33 +16,36 @@
                     <div class="col-md-8">
                         <h1><strong>{{ licor.nombre }}</strong></h1>
                         {% if licor.creador == user %}
-                            <a href="{% url 'editar_licor' licor.id %}"> editar</a>
+                            <a href="{% url 'editar_licor' licor.id %}" class="btn btn-primary mb-3">
+                                <i class="fas fa-edit"></i> Eres el vendedor del producto, puedes editar los detalles del mismo
+                            </a>
                         {% endif %}
                         <p><strong>Autor:</strong> {{ licor.marca }}</p>
                         <p><strong>Precio:</strong> ${{ licor.precio }}</p>
                         <p><strong>En Stock:</strong> {{ licor.cantidad }}</p>
                         <h4 style="color: #000;">Descripción</h4>
                         <p>{{ licor.descripcion }}</p>
-                    </div>
-                    <div class="row mt-4 justify-content-center">
-                        <div class="col-md-10">
-                            <form method="post" id="agregarCarritoForm">
+                        <div class="d-flex align-items-center mb-3">
+                            <label for="cantidadInput" class="form-label me-2">Cantidad:</label>
+                            <input type="number" class="form-control" id="cantidadInput" name="cantidad" value="1" min="1" style="width: 80px;">
+                        </div>
+                        <div class="d-flex mb-3">
+                            <form method="post" id="agregarCarritoForm" class="me-2">
                                 {% csrf_token %}
                                 <input type="hidden" name="licor_id" value="{{ licor.id }}">
-                                <div class="mb-3">
-                                    <label for="cantidadInput" class="form-label">Cantidad:</label>
-                                    <input type="number" class="form-control" id="cantidadInput" name="cantidad" value="1" min="1">
-                                </div>
-                                <button type="submit" class="btn btn-primary">Añadir al carrito</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-shopping-cart"></i> <i class="fas fa-plus"></i> Añadir al carrito
+                                </button>
                             </form>
                             <form method="post" id="agregarWishlistForm">
                                 {% csrf_token %}
                                 <input type="hidden" name="licor_id" value="{{ licor.id }}">
-                                <button type="submit" class="btn btn-primary">Añadir a la Wishlist</button>
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-star"></i> Añadir a la Wishlist
+                                </button>
                             </form>
                         </div>
                     </div>
-    
                 </div>
 
                 <div class="row mt-4 justify-content-center">

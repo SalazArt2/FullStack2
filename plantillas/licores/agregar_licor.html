@@ -3,10 +3,49 @@
 {% block titulo %} - Agregar Licor{% endblock titulo %}
 
 {% block contenido %}
-    <h1>Agregar un nuevo licor</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Guardar</button>
-    </form>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="reviews-container">
+                <div class="text-white">
+                    <h2 style="color: #ffffff; font-size:xx-large">Agregar un nuevo producto</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_nombre" class="form-label">Nombre</label>
+                            {{ form.nombre }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_marca" class="form-label">Marca</label>
+                            {{ form.marca }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_cantidad" class="form-label">Cantidad</label>
+                            {{ form.cantidad }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_descripcion" class="form-label">Descripción</label>
+                            {{ form.descripcion }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_precio" class="form-label">Precio</label>
+                            {{ form.precio }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_imagen" class="form-label">Imagen</label>
+                            {{ form.imagen }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_categorias" class="form-label">Categorías</label>
+                            {{ form.categorias }}
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock contenido %}
