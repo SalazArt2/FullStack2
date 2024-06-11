@@ -238,3 +238,7 @@ class AgregarLicorView(CreateView):
     form_class = LicorForm
     template_name = 'licores/agregar_licor.html'
     success_url = '/licores/'  # Redirige a la lista de licores después de agregar
+
+    def form_valid(self, form):
+        form.instance.creador = self.request.user
+        return super().form_valid(form)
