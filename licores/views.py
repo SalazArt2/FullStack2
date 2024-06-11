@@ -232,3 +232,9 @@ class VistaEditarLicor(UpdateView):
     context_object_name = 'licor'
     template_name = 'licores/editar_licor.html'
     success_url = reverse_lazy('lista_licores')
+
+class AgregarLicorView(CreateView):
+    model = Licor
+    form_class = LicorForm
+    template_name = 'licores/agregar_licor.html'
+    success_url = '/licores/'  # Redirige a la lista de licores después de agregar

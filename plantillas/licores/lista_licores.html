@@ -23,6 +23,15 @@
 
     <div class="container">
         <div class="row infinite-scroll">
+            <!-- Botón para agregar nuevo licor -->
+            <div class="col-md-3 col-sm-4 mb-4">
+                <div class="product-card card h-100 d-flex align-items-center justify-content-center">
+                    <a href="{% url 'agregar_licor' %}" class="btn btn-success btn-lg btn-block">
+                        <i class="fas fa-plus"></i> Agregar Nuevo Licor
+                    </a>
+                </div>
+            </div>
+
             {% for licor in lista_licores %}
                 <div class="col-md-3 col-sm-4 mb-4">
                     {% if licor.cantidad > 0 %}
@@ -66,7 +75,6 @@
                     {% endif %}
                 </div>
             {% endfor %}
-
         </div>
     </div>
     <div class="pagination">

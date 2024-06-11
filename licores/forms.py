@@ -10,3 +10,4 @@ class LicorForm(forms.ModelForm):
     class Meta:
         model = Licor
         fields = ['nombre', 'marca', 'cantidad','descripcion', 'precio', 'imagen', 'categorias']
+
