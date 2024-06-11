@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, DetailView,View,CreateView
+from django.views.generic import ListView, DetailView,View,CreateView,UpdateView
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Q, Count
@@ -224,4 +224,11 @@ class VistaAgregarLicor(CreateView):
     model = Licor
     form_class = LicorForm
     template_name = 'licores/agregar_licor.html'
+    success_url = reverse_lazy('lista_licores')
+
+class VistaEditarLicor(UpdateView):
+    model = Licor
+    form_class = LicorForm
+    context_object_name = 'licor'
+    template_name = 'licores/editar_licor.html'
     success_url = reverse_lazy('lista_licores')

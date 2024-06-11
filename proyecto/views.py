@@ -1,10 +1,8 @@
-from django.urls import reverse
-from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.views import View
 from .paypal_config import paypalrestsdk
-from licores.models import Carrito
+from licores.models import Carrito, Licor
 
 class VistaCrearPago(View):
     def post(self, request):
@@ -65,6 +63,9 @@ class VistaEjecutarPago(View):
             carrito = Carrito.objects.get(usuario=usuario)
             items_en_carrito = carrito.items.all()
             for item in items_en_carrito:
+                licor = item.licor
+                licor.cantidad -= item.cantidad
+                licor.save()
                 item.delete()
             return redirect('inicio')
         #else:

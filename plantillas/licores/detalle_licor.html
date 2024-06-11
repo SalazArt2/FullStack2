@@ -15,8 +15,12 @@
                     </div>
                     <div class="col-md-8">
                         <h1><strong>{{ licor.nombre }}</strong></h1>
+                        {% if licor.creador == user %}
+                            <a href="{% url 'editar_licor' licor.id %}"> editar</a>
+                        {% endif %}
                         <p><strong>Autor:</strong> {{ licor.marca }}</p>
                         <p><strong>Precio:</strong> ${{ licor.precio }}</p>
+                        <p><strong>En Stock:</strong> {{ licor.cantidad }}</p>
                         <h4 style="color: #000;">Descripción</h4>
                         <p>{{ licor.descripcion }}</p>
                     </div>

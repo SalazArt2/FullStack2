@@ -14,7 +14,7 @@ class LicorAdmin( admin.ModelAdmin ):
     inlines=(
         ResenhaEnLinea,
     )    
-    list_display = ('nombre', 'marca', 'precio','descripcion')
+    list_display = ('nombre', 'marca', 'precio','descripcion','cantidad')
 
 # Register your models here.
 admin.site.register( Licor, LicorAdmin )

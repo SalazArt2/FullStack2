@@ -22,19 +22,47 @@
     <div class="container">
         <div class="row infinite-scroll">
             {% for licor in lista_licores %}
-                <div class="col-md-3 col-sm-4 mb-4">
+            <div class="col-md-3 col-sm-4 mb-4">
+                {% if licor.cantidad > 0 %}
                     <a href="{{ licor.get_absolute_url }}" class="text-decoration-none">
                         <div class="product-card card h-100">
                             <img class="portada card-img-top" src="{{ licor.imagen.url }}" 
-                            alt="{{ licor.nombre }}" title="{{ licor.nombre }}">
+                                alt="{{ licor.nombre }}" title="{{ licor.nombre }}">
                             <div class="card-body">
                                 <h5 class="card-title">{{ licor.nombre }}</h5>
-                                <p class="card-text">Autor: {{ licor.marca }}</p>
-                                <p class="card-text">Precio: ${{ licor.precio }}</p>
+                                <p class="card-text"><strong>Marca:</strong> {{ licor.marca }}</p>
+                                <p class="card-text"><strong>Precio:</strong> ${{ licor.precio }}</p>
                             </div>
                         </div>
                     </a>
-                </div>
+                {% else %}
+                    {% if request.user == licor.creador %}
+                        <a href="{% url 'editar_licor' licor.id %}" class="text-decoration-none">
+                            <div class="product-card card h-100">
+                                <img class="portada card-img-top" src="{{ licor.imagen.url }}" 
+                                    alt="{{ licor.nombre }}" title="{{ licor.nombre }}" style="opacity: 0.5;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ licor.nombre }}</h5>
+                                    <p class="card-text"><strong>Marca:</strong> {{ licor.marca }}</p>
+                                    <p class="card-text"><strong>Precio:</strong> ${{ licor.precio }}</p>
+                                    <p class="text-danger"><strong>Agotado</strong></p>
+                                </div>
+                            </div>
+                        </a>
+                    {% else %}
+                        <div class="product-card card h-100">
+                            <img class="portada card-img-top" src="{{ licor.imagen.url }}" 
+                                alt="{{ licor.nombre }}" title="{{ licor.nombre }}" style="opacity: 0.5;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ licor.nombre }}</h5>
+                                <p class="card-text"><strong>Marca:</strong> {{ licor.marca }}</p>
+                                <p class="card-text"><strong>Precio:</strong> ${{ licor.precio }}</p>
+                                <p class="text-danger"><strong>Agotado</strong></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
             {% endfor %}
         </div>
     </div>

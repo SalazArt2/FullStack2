@@ -1,4 +1,4 @@
-import paypalrestsdk
+import paypalrestsdk # type: ignore
 from django.conf import settings
 
 paypalrestsdk.configure({

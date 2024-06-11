@@ -13,6 +13,11 @@ class Categoria(models.Model):
         return self.categoria
 
 class Licor( models.Model ):
+
+    def get_default_user():
+        User = get_user_model()
+        return User.objects.get(username='admon').id
+    
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -22,9 +27,16 @@ class Licor( models.Model ):
     marca = models.CharField(max_length=200)
     precio = models.DecimalField(max_digits=7, decimal_places=2)
     imagen=models.ImageField(upload_to='imagenes/',blank=True)
+    cantidad=models.PositiveIntegerField(default=100)
     descripcion = models.CharField(max_length=200)
     categorias = models.ManyToManyField(Categoria, related_name="licores")
 
+    creador=models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        blank=True,        
+        default=get_default_user,
+    )
     class Meta:
         permissions=[
             ('special_status','Puede ver todos los licores')
@@ -35,6 +47,8 @@ class Licor( models.Model ):
 
     def get_absolute_url( self ):
         return reverse( "detalle_licor", args=[str(self.id)] )
+    def get_editable_url( self ):
+        return reverse( "editar_licor", args=[str(self.id)] )
     
 class Resenha(models.Model):
     licor = models.ForeignKey(
