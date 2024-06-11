@@ -45,12 +45,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'django.core.mail',
+    #'django.contrib.sites',
+    
+    # De terceros
     'crispy_forms',
     'crispy_bootstrap5',
     'allauth',
     'allauth.account',
     'debug_toolbar',
+    # Locales
     'cuentas.apps.CuentasConfig',
     'paginas.apps.PaginasConfig',
     'licores.apps.LicoresConfig',
@@ -127,9 +131,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-mx'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Monterrey'
 
 USE_I18N = True
 
@@ -159,7 +163,15 @@ AUTHETICATION_BACKEDNS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# Envío de correos
+DEFAULT_FROM_EMAIL = 'noreply@micorreo.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'alu.20130820@correo.itlalaguna.edu.mx'
+EMAIL_HOST_PASSWORD = 'mipasswordsecreto'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+# Registro de sesión
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 ACCOUNT_USERNAME_REQUIRED = True

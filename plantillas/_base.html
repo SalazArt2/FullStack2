@@ -41,6 +41,9 @@
                                 <i class="fas fa-user"></i>
                             </a>
                         </li>
+                        <ul class = "dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                            <li> <a class="dropdown-item" href="{% url 'password_change' %}">Cambiar Contraseña</a></li>
+                        </ul>
                     {% else %}
                         <li class="nav-item login-link">
                             <a class="nav-link" href="{% url 'account_login' %}">Iniciar Sesión / Inscribirme</a>

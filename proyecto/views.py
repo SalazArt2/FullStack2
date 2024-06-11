@@ -46,6 +46,7 @@ class VistaCrearPago(View):
                     return JsonResponse({'approval_url': link.href})
         else:
             return JsonResponse({'error': payment.error}, status=400)
+        
 class VistaEjecutarPago(View):
     def get(self, request):
         # Obtener los parámetros de la URL
@@ -72,3 +73,4 @@ class VistaEjecutarPago(View):
             # Manejar el caso en el que el pago no se ejecutó con éxito
             # Redirigir a una página de error o hacer lo que sea necesario
             #return redirect('pagina_de_error')
+            

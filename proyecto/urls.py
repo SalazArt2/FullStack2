@@ -22,12 +22,13 @@ from .views import VistaCrearPago, VistaEjecutarPago
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('paginas.urls')),
-    # path('cuentas/', include('django.contrib.auth.urls')),
-    # path('cuentas/', include('cuentas.urls')),
+    path('', include('django.contrib.auth.urls')),
+    path('', include('cuentas.urls')),
     path('cuentas/', include('allauth.urls')),
     path('licores/', include('licores.urls')),
     path('payment/create/', VistaCrearPago.as_view(), name='create_payment'),
     path('payment/execute/', VistaEjecutarPago.as_view(), name='execute_payment'),
+    
 ] + static(
     settings.MEDIA_URL,
     document_root=settings.MEDIA_ROOT
