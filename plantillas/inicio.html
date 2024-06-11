@@ -4,7 +4,7 @@
 {% block titulo %} - Inicio {% endblock titulo %}
 
 {% block contenido %}
-<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+<div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-bs-ride="carousel">
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -43,8 +43,29 @@
     </button>
 </div>
 
-<div class="mt-5 text-center">
-    <h1>Esta es nuestra página de inicio</h1>
-    <p>Bienvenido a nuestra licorería virtual. Aquí encontrarás una amplia variedad de licores de alta calidad a los mejores precios. Disfruta de nuestra selección especial y no dudes en contactarnos para cualquier consulta.</p>
+<div class="mt-5 text-left">
+    <h1>Disfruta de la mejor seleccion de licor, con nuestros productos destacados!</h1>
+    <p>La mejor calidad para los clientes de mas alto nivel, estos son los productos top de esta semana!</p>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        {% for licor in licores %}
+            <div class="col-md-2 col-sm-4 mb-4">
+                <a href="{{ licor.get_absolute_url }}" class="text-decoration-none">
+                    <div class="product-card card h-100">
+                        <img class="portada card-img-top" src="{{ licor.imagen.url }}" alt="{{ licor.nombre }}" title="{{ licor.nombre }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ licor.nombre }}</h5>
+                            <p class="card-text"><strong>Marca:</strong> {{ licor.marca }}</p>
+                            <p class="card-text"><strong>Precio:</strong> ${{ licor.precio }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% empty %}
+            <p>No hay licores disponibles en este momento.</p>
+        {% endfor %}
+    </div>
 </div>
 {% endblock contenido %}

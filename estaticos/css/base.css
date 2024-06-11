@@ -50,6 +50,36 @@ body {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 16 16'%3E%3Cpath d='M4.646 1.354a.5.5 0 0 0 0 .707L9.293 6.707l-4.647 4.646a.5.5 0 0 0 .708.708l5-5a.5.5 0 0 0 0-.707l-5-5a.5.5 0 0 0-.708 0z'/%3E%3C/svg%3E");
 }
 
+.carousel-fade .carousel-item {
+    opacity: 0;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-in-out;
+}
+
+.carousel-fade .carousel-item.active,
+.carousel-fade .carousel-item-next.carousel-item-start,
+.carousel-fade .carousel-item-prev.carousel-item-end {
+    opacity: 1;
+}
+
+.carousel-fade .active.carousel-item-start,
+.carousel-fade .active.carousel-item-end {
+    opacity: 0;
+}
+
+.carousel-fade .carousel-item-next,
+.carousel-fade .carousel-item-prev,
+.carousel-fade .carousel-item.active,
+.carousel-fade .active.carousel-item-start,
+.carousel-fade .active.carousel-item-end {
+    transform: translateX(0);
+}
+
+.carousel-item {
+    height: 50vh; /* Ajusta la altura del carrusel */
+}
+
+
 
 .container {
     margin-top: 20px;

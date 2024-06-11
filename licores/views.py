@@ -1,3 +1,4 @@
+import random
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView,View,CreateView,UpdateView
@@ -238,3 +239,4 @@ class AgregarLicorView(CreateView):
     form_class = LicorForm
     template_name = 'licores/agregar_licor.html'
     success_url = '/licores/'  # Redirige a la lista de licores después de agregar
+
