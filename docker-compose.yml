@@ -12,7 +12,7 @@ services:
       - db
     environment:
       - DJANGO_SECRET_KEY=django-insecure-5u+0x)(04w@4fplu*p7-jfdn8#a7n^qkoqm67vg2%uo#1wc(-!
-      - DJANGO_DEBUG=True
+      - DJANGO_DEBUG=False
   db:
     image: postgres:13
     volumes:
